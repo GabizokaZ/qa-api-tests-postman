@@ -37,3 +37,5 @@ Aberto
 A requisição POST foi executada via Postman com payload inválido.
 Mesmo sem o campo obrigatório `title`, a API retornou status 201 (Created)
 e gerou um ID para o recurso.
+### Evidência
+![Bug-01 Evidence](evidences/bug-01-postman-evidence.png)
