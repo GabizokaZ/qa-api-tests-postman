@@ -32,3 +32,8 @@ Média
 
 ### Status
 Aberto
+
+### Evidência
+A requisição POST foi executada via Postman com payload inválido.
+Mesmo sem o campo obrigatório `title`, a API retornou status 201 (Created)
+e gerou um ID para o recurso.
