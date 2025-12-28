@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "13129f86-b33f-4bfe-89c7-684e9296b5fb",
+		"name": "QA API Tests - JSONPlaceholder",
+		"description": "## QA API Tests – JSONPlaceholder\n\nCollection criada para testes de API REST utilizando o Postman, com foco em validações funcionais, testes positivos e negativos e automação básica de testes.\n\n### Tecnologias e ferramentas\n\n- Postman\n    \n- API REST\n    \n- JSON\n    \n- Testes automatizados (Post-res Scripts)\n    \n\n### Endpoints testados\n\n- GET /posts\n    \n- POST /posts\n    \n- PUT /posts/{id}\n    \n- DELETE /posts/{id}\n    \n\n### Tipos de testes realizados\n\n- Testes funcionais\n    \n- Testes positivos e negativos\n    \n- Validação de status code\n    \n- Validação de estrutura e tipos de dados\n    \n- Simulação de cenários de erro\n    \n\nAPI utilizada para testes: JSONPlaceholder (API mock).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "51101996",
+		"_collection_link": "https://gabizokaz-8300918.postman.co/workspace/437d7380-1414-45ec-86c6-f94e5a684e8c/collection/51101996-13129f86-b33f-4bfe-89c7-684e9296b5fb?action=share&source=collection_link&creator=51101996"
+	},
+	"item": [
+		{
+			"name": "GET /posts",
+			"item": [
+				{
+					"name": "Listar todos os posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response é um array\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Array não está vazio\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).to.be.above(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Objeto contém campos obrigatórios\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    const post = jsonData[0];\r",
+									"\r",
+									"    pm.expect(post).to.have.property(\"userId\");\r",
+									"    pm.expect(post).to.have.property(\"id\");\r",
+									"    pm.expect(post).to.have.property(\"title\");\r",
+									"    pm.expect(post).to.have.property(\"body\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						},
+						"description": "## GET – Listar todos os posts\n\nEste endpoint retorna a lista completa de posts disponíveis na API JSONPlaceholder.\n\n### Endpoint\n\n`GET /posts`\n\n### Descrição\n\nUtilizado para consultar todos os posts cadastrados.\n\n### Validações realizadas\n\n- Status code 200\n    \n- Response no formato JSON\n    \n- Retorno é um array\n    \n- Array não está vazio\n    \n- Cada objeto contém os campos obrigatórios:\n    \n    - userId\n        \n    - id\n        \n    - title\n        \n    - body\n        \n- Validação de tipos de campos\n    \n\n### Tipo de teste\n\n- Teste funcional\n    \n- Teste de contrato\n    \n- Teste positivo"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Buscar post por ID (200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response é um objeto\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"ID retornado é 1\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(1);\r",
+									"});\r",
+									"pm.test(\"Objeto contém campos obrigatórios\", function () {\r",
+									"    const post = pm.response.json();\r",
+									"\r",
+									"    pm.expect(post).to.have.property(\"userId\");\r",
+									"    pm.expect(post).to.have.property(\"id\");\r",
+									"    pm.expect(post).to.have.property(\"title\");\r",
+									"    pm.expect(post).to.have.property(\"body\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"postId\", 1);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/{{postId}}",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"{{postId}}"
+							]
+						},
+						"description": "## GET – Buscar post por ID\n\nEste endpoint retorna um post específico a partir do ID informado.\n\n### Endpoint\n\n`GET /posts/{id}`\n\n### Exemplo\n\n`GET /posts/1`\n\n### Descrição\n\nUtilizado para consultar um post específico pelo seu identificador único (ID).\n\n### Validações realizadas\n\n- Status code 200\n    \n- Response no formato JSON\n    \n- Retorna um objeto\n    \n- O campo `id` corresponde ao ID informado na requisição\n    \n- Presença dos campos obrigatórios:\n    \n    - userId\n        \n    - id\n        \n    - title\n        \n    - body\n        \n\n### Tipo de teste\n\n- Teste funcional\n    \n- Teste de contrato\n    \n- Teste positivo"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Buscar post inexistente (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Response é um objeto vazio\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(Object.keys(jsonData).length).to.eql(0);\r",
+									"});\r",
+									"pm.test(\"Não retorna campos de post\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.userId).to.be.undefined;\r",
+									"    pm.expect(jsonData.id).to.be.undefined;\r",
+									"    pm.expect(jsonData.title).to.be.undefined;\r",
+									"    pm.expect(jsonData.body).to.be.undefined;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/9999",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"9999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Buscar post com ID inválido (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 404 para ID inválido\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"Response é um objeto vazio\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(Object.keys(jsonData).length).to.eql(0);\r",
+									"});\r",
+									"pm.test(\"Campos do post não existem no response\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(jsonData.userId).to.be.undefined;\r",
+									"    pm.expect(jsonData.id).to.be.undefined;\r",
+									"    pm.expect(jsonData.title).to.be.undefined;\r",
+									"    pm.expect(jsonData.body).to.be.undefined;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/abc",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"abc"
+							]
+						},
+						"description": "## GET – Buscar post por ID\n\nEste endpoint retorna um post específico a partir do ID informado.\n\n### Endpoint\n\n`GET /posts/{id}`\n\n### Exemplo\n\n`GET /posts/1`\n\n### Descrição\n\nUtilizado para consultar um post específico pelo seu identificador único (ID).\n\n### Validações realizadas\n\n- Status code 200\n    \n- Response no formato JSON\n    \n- Retorna um objeto\n    \n- O campo `id` corresponde ao ID informado na requisição\n    \n- Presença dos campos obrigatórios:\n    \n    - userId\n        \n    - id\n        \n    - title\n        \n    - body\n        \n\n### Tipo de teste\n\n- Teste funcional\n    \n- Teste de contrato\n    \n- Teste positivo"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Buscar post válido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200 para postId válido\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"ID retornado é igual ao postId enviado\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"postId\")));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/{{postId}}",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"{{postId}}"
+							]
+						},
+						"description": "## GET – Buscar post válido\n\nEste endpoint permite buscar um post específico a partir de um ID válido.\n\n### Endpoint\n\n`GET /posts/{id}`\n\n### Exemplo\n\n`GET /posts/1`\n\n### Descrição\n\nUtilizado para validar a recuperação correta de um post existente na API, garantindo que os dados retornados estejam completos e no formato esperado.\n\n### Parâmetros\n\n| Nome | Tipo | Obrigatório | Descrição |\n| --- | --- | --- | --- |\n| id | path | Sim | Identificador único do post |\n\n### Resposta esperada\n\n- Status code: **200 OK**\n    \n- Corpo da resposta em formato **JSON**\n    \n- Objeto contendo os campos:\n    \n    - `userId`\n        \n    - `id`\n        \n    - `title`\n        \n    - `body`\n        \n\n### Validações realizadas\n\n- Status code é 200\n    \n- Response contém um objeto\n    \n- Objeto não está vazio\n    \n- Campos obrigatórios estão presentes\n    \n\n### Tipo de teste\n\n- Teste funcional\n    \n- Teste positivo"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST /posts",
+			"item": [
+				{
+					"name": "POST - Criar novo post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response é um objeto\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"Response contém campos obrigatórios\", function () {\r",
+									"    const post = pm.response.json();\r",
+									"\r",
+									"    pm.expect(post).to.have.property(\"id\");\r",
+									"    pm.expect(post).to.have.property(\"title\");\r",
+									"    pm.expect(post).to.have.property(\"body\");\r",
+									"    pm.expect(post).to.have.property(\"userId\");\r",
+									"});\r",
+									"pm.test(\"Dados retornados são iguais aos enviados\", function () {\r",
+									"    const post = pm.response.json();\r",
+									"\r",
+									"    pm.expect(post.title).to.eql(\"Teste de criação de post\");\r",
+									"    pm.expect(post.body).to.eql(\"Conteúdo do post criado via Postman\");\r",
+									"    pm.expect(post.userId).to.eql(1);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Teste de criação de post\",\r\n  \"body\": \"Conteúdo do post criado via Postman\",\r\n  \"userId\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						},
+						"description": "## POST – Criar novo post\n\nEste endpoint permite criar um novo post na API, enviando os dados no corpo da requisição.\n\n### Endpoint\n\n`POST /posts`\n\n### Exemplo\n\n`POST /posts`\n\n### Descrição\n\nUtilizado para validar a criação de um novo post, garantindo que a API aceite corretamente os dados enviados e retorne a estrutura esperada na resposta.\n\n### Headers\n\n| Nome | Valor |\n| --- | --- |\n| Content-Type | application/json |\n\n### Body (JSON)\n\n``` json\n{\n  \"userId\": 1,\n  \"title\": \"Título do post\",\n  \"body\": \"Conteúdo do post\"\n}\n\n ```\n\nStartFragment\n\n### Campos do Body\n\n| Campo | Tipo | Obrigatório | Descrição |\n| --- | --- | --- | --- |\n| userId | number | Sim | Identificador do usuário |\n| title | string | Sim | Título do post |\n| body | string | Sim | Conteúdo do post |\n\n### Resposta esperada\n\n- Status code: **201 Created**\n    \n- Corpo da resposta em formato **JSON**\n    \n- Retorno de um objeto contendo:\n    \n    - `userId`\n        \n    - `id` (gerado pela API)\n        \n    - `title`\n        \n    - `body`\n        \n\n### Validações realizadas\n\n- Status code é 201\n    \n- Response contém um objeto\n    \n- Campos obrigatórios retornados\n    \n- ID gerado automaticamente\n    \n\n### Tipo de teste\n\n- Teste funcional\n    \n- Teste positivo\n    \n\nEndFragment"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Criar post sem body (NEGATIVO)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code indica erro de validação\", () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Resposta contém mensagem de erro\", () => {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.an(\"object\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Post sem body\",\r\n  \"userId\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						},
+						"description": "StartFragment\n\n### POST – Criar post sem body (NEGATIVO)\n\n#### Descrição\n\nEste request valida o comportamento da API ao tentar criar um post **sem o campo obrigatório** **`body`**, simulando um cenário de erro de validação.\n\n#### Objetivo\n\nGarantir que a API:\n\n- Não aceite requisições com payload incompleto\n    \n- Retorne status de erro apropriado\n    \n\n#### Request Body (inválido)\n\n```\n{\n  \"title\": \"Post sem body\",\n  \"userId\": 1\n}\n\n ```\n\n#### Resultado esperado\n\n- Status **400 Bad Request**  \n    **ou**\n    \n- Retorno com erro indicando campo obrigatório ausente\n    \n\nStartFragment\n\n⚠️ **Observação**\n\nA API JSONPlaceholder aceita payload incompleto e retorna **201 Created**, não realizando validação real dos campos obrigatórios.  \n  \nEsse comportamento foi registrado como **limitação da API de testes**."
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Criar post com campos inválisdos (NEGATIVO)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code indica erro de validação\", () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": 123,\r\n  \"body\": true,\r\n  \"userId\": \"abc\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						},
+						"description": "StartFragment\n\n### POST – Criar post com campos inválidos (NEGATIVO)\n\n#### 📄 Descrição\n\nValida o comportamento da API ao tentar criar um post com **tipos de dados inválidos**, simulando erros comuns de payload.\n\n#### Objetivo\n\nGarantir que a API:\n\n- Valide tipos de dados enviados\n    \n- Rejeite requisições inválidas\n    \n\n#### Request Body (inválido)\n\n```\n{\n  \"title\": 123,\n  \"body\": true,\n  \"userId\": \"abc\"\n}\n\n ```\n\n#### Resultado esperado\n\n- Status **400 Bad Request**  \n    **ou**\n    \n- Erro indicando tipos inválidos\n    \n\nStartFragment\n\n⚠️ **Observação**\n\nA API JSONPlaceholder aceita valores com tipos inválidos e retorna **201 Created**, não realizando validação real dos dados.  \n  \nEste comportamento representa uma **limitação da API de testes**."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT /posts/{id}",
+			"item": [
+				{
+					"name": "PUT - Atualizar post existente (POSITIVO)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", () => {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Post atualizado corretamente\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"id\", 1);\r",
+									"    pm.expect(jsonData).to.have.property(\"title\", \"Post atualizado via PUT\");\r",
+									"    pm.expect(jsonData).to.have.property(\"body\", \"Conteúdo atualizado para teste de QA\");\r",
+									"    pm.expect(jsonData).to.have.property(\"userId\", 1);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"title\": \"Post atualizado via PUT\",\r\n  \"body\": \"Conteúdo atualizado para teste de QA\",\r\n  \"userId\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/1",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"1"
+							]
+						},
+						"description": "### PUT – Atualizar post existente (POSITIVO)\n\n#### Descrição\n\nValida a atualização completa de um post existente utilizando o método **PUT**.\n\n#### Objetivo\n\nGarantir que a API:\n\n- Aceite atualização total de um recurso\n    \n- Retorne sucesso ao atualizar um post existente\n    \n\n#### Request Body\n\n```\n{\n  \"id\": 1,\n  \"title\": \"Post atualizado via PUT\",\n  \"body\": \"Conteúdo atualizado para teste de QA\",\n  \"userId\": 1\n}\n\n ```\n\n#### Resultado esperado\n\n- Status **200 OK**\n    \n- Objeto retornado com os dados atualizados\n    \n\n⚠️ **Observação**\n\nA API JSONPlaceholder simula a atualização e não persiste os dados.\n\nA resposta indica sucesso, mas o recurso não é realmente modificado no backend"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Atualizar post inexistente (NEGATIVO)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code indica recurso inexistente\", () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404, 400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 9999,\r\n  \"title\": \"Tentativa de atualização\",\r\n  \"body\": \"Atualizando post inexistente\",\r\n  \"userId\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/9999",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"9999"
+							]
+						},
+						"description": "### PUT – Atualizar post inexistente (NEGATIVO)\n\n#### Descrição\n\nValida o comportamento da API ao tentar atualizar um post que **não existe**.\n\n#### Objetivo\n\nGarantir que a API:\n\n- Retorne erro ao tentar atualizar um recurso inexistente\n    \n- Não crie um novo recurso indevidamente\n    \n\n#### Request Body\n\n```\n{\n  \"id\": 9999,\n  \"title\": \"Tentativa de atualização\",\n  \"body\": \"Atualizando post inexistente\",\n  \"userId\": 1\n}\n\n ```\n\n#### Resultado esperado\n\n- Status **404 Not Found**  \n    **ou**\n    \n- Erro indicando que o recurso não existe\n    \n\n⚠️ **Observação**\n\nA API JSONPlaceholder retorna **200 OK** mesmo ao atualizar um recurso inexistente, simulando apenas a resposta.  \n  \nEste comportamento representa uma **limitação da API de testes**."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE /posts",
+			"item": [
+				{
+					"name": "DELETE - Remover post (POSITIVO)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"description": "### DELETE – Remover post (POSITIVO)\n\n#### Descrição\n\nValida a remoção de um post existente por meio do método **DELETE**.\n\n#### Objetivo\n\nGarantir que a API:\n\n- Aceite a remoção de um recurso existente\n    \n- Retorne resposta de sucesso\n    \n\n#### Resultado esperado\n\n- Status **200 OK** ou **204 No Content**\n    \n- Corpo da resposta vazio ou com confirmação da exclusão\n    \n\n⚠️ **Observação**\n\nA API JSONPlaceholder simula a exclusão e não remove o recurso de forma persistente."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
