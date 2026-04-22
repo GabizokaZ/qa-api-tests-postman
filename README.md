@@ -22,7 +22,7 @@ Projeto de testes de API com foco na validação de endpoints REST, simulando ce
 - Tratamento de erro
 
 ## 📎 Evidências
-[Coloque prints aqui]
+[(https://github.com/GabizokaZ/qa-api-tests-postman/blob/main/bug-reports/evidences)]
 
 ## 👩‍💻 Sobre mim
 Projeto desenvolvido com foco em aprendizado de QA e testes de API.
